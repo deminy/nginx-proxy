@@ -19,17 +19,17 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
 ADD https://github.com/jwilder/forego/releases/download/v0.16.1/forego /usr/local/bin/forego
 RUN chmod u+x /usr/local/bin/forego
 
-RUN wget https://github.com/jwilder/docker-gen/archive/master.zip \
+RUN git clone https://github.com/jwilder/docker-gen.git \
  && export GOPATH=$HOME/go               \
  && export PATH=$PATH:$GOPATH/bin        \
- && unzip master.zip                     \
- && cd docker-gen-master                 \
+ && cd docker-gen                        \
  && make get-deps                        \
  && go get github.com/jwilder/docker-gen \
  && make docker-gen                      \
- && cp docker-gen /usr/local/bin/.       \
+ && ./docker-gen -version                \
+ && cp ./docker-gen /usr/local/bin/.     \
  && cd ..                                \
- && rm -rf master.zip docker-gen-master
+ && rm -rf docker-gen
 
 COPY network_internal.conf /etc/nginx/
 
