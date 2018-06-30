@@ -22,14 +22,17 @@ RUN chmod u+x /usr/local/bin/forego
 RUN git clone https://github.com/jwilder/docker-gen.git \
  && export GOPATH=$HOME/go               \
  && export PATH=$PATH:$GOPATH/bin        \
+ && go env                               \
  && cd docker-gen                        \
+ && git branch -a                        \
+ && git log -n 3                         \
  && make get-deps                        \
  && go get github.com/jwilder/docker-gen \
  && make docker-gen                      \
- && ./docker-gen -version                \
  && cp ./docker-gen /usr/local/bin/.     \
  && cd ..                                \
- && rm -rf docker-gen
+ && rm -rf docker-gen                    \
+ && docker-gen -version
 
 COPY network_internal.conf /etc/nginx/
 
